@@ -1,4 +1,6 @@
-﻿public class World {
+﻿using System;
+
+public class World {
     #region Fields
 
     Tile[,] tiles;
@@ -10,9 +12,15 @@
 
     #region Properties
 
-    public Tile[,] Tiles {
+    public int Width {
         get {
-            return this.tiles;
+            return this.width;
+        }
+    }
+
+    public int Height {
+        get {
+            return this.height;
         }
     }
 
@@ -32,6 +40,19 @@
                 tiles[x, y] = new Tile(this, x, y);
             }
         }
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    public Tile GetTileAt(int x, int y) {
+        if (x >= Width || x < 0) {
+            throw new ArgumentOutOfRangeException("x");
+        } else if (y >= Height || y < 0) {
+            throw new ArgumentOutOfRangeException("y");
+        }
+        return tiles[x, y];
     }
 
     #endregion

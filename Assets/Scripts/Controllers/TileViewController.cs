@@ -11,6 +11,8 @@ public class TileViewController : MonoBehaviour {
     // FIXME: Implement this in a better way
     Dictionary<string, Sprite> tileSpriteMap;
 
+    World world;
+
     #endregion
 
     #region MonoBehavior Implementations
@@ -28,11 +30,12 @@ public class TileViewController : MonoBehaviour {
             tileSpriteMap[sprite.name] = sprite;
         }
 
+        world = WorldController.Instance.World;
+
         // Create the Tile views from the Tile models
-        Tile[,] tiles = WorldController.Instance.World.Tiles;
-        for (int x = 0; x < tiles.GetLength(0); x++) {
-            for (int y = 0; y < tiles.GetLength(1); y++) {
-                Tile tile = tiles[x, y];
+        for (int x = 0; x < world.Width; x++) {
+            for (int y = 0; y < world.Height; y++) {
+                Tile tile = world.GetTileAt(x, y);
 
                 GameObject tileGO = (GameObject)Instantiate(tileViewPrefab, new Vector3(tile.X, tile.Y, 0.0f), Quaternion.identity);
                 TileView tileView = tileGO.GetComponent<TileView>();

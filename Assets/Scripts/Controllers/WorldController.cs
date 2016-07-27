@@ -32,6 +32,9 @@ public class WorldController : MonoBehaviour {
         Instance = this;
 
         world = new World(worldWidth, worldHeight);
+
+        // Center the Camera
+        Camera.main.transform.position = new Vector3(world.Width / 2, world.Height / 2, Camera.main.transform.position.z);
     }
 	
 	void Update() {
