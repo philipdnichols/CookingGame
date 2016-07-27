@@ -1,10 +1,20 @@
 ﻿public class World {
-    #region Private Fields
+    #region Fields
 
-    private Tile[,] tiles;
+    Tile[,] tiles;
 
-    private int width;
-    private int height;
+    int width;
+    int height;
+
+    #endregion
+
+    #region Properties
+
+    public Tile[,] Tiles {
+        get {
+            return this.tiles;
+        }
+    }
 
     #endregion
 

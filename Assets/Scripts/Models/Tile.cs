@@ -1,6 +1,6 @@
 ﻿using System;
 
-public enum TileType { Dirt }
+public enum TileType { Dirt, Grass }
 
 public class Tile {
     #region Fields
@@ -50,10 +50,11 @@ public class Tile {
 
         set {
             if (this.__type != value) {
+                TileType previousType = this.__type;
                 this.__type = value;
 
-                if (typeChangedCallback != null) { 
-                    typeChangedCallback(this);
+                if (typeChangedCallback != null) {
+                    typeChangedCallback(this, previousType);
                 }
             }
         }
@@ -63,7 +64,8 @@ public class Tile {
 
     #region Events
 
-    public event Action<Tile> typeChangedCallback; 
+    // TODO: is this the proper way to use events?
+    public event Action<Tile, TileType> typeChangedCallback; 
 
     #endregion
 
