@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraController : MonoBehaviour {
+public class CameraManager : MonoBehaviour {
     #region Fields
 
     public float fastSpeedMultiplier = 2.0f;

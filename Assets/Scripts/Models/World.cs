@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public class World {
     #region Fields
 
     Tile[,] tiles;
+    List<Character> characters;
 
     int width;
     int height;
@@ -24,33 +26,67 @@ public class World {
         }
     }
 
+    public List<Character> Characters {
+        get {
+            return this.characters;
+        }
+    }
+
+    #endregion
+
+    #region Events
+
+    public event Action<Tile> tileCreatedCallback;
+    public event Action<Character> characterCreatedCallback;
+
     #endregion
 
     #region Contructors
 
-    public World(int width = 100, int height = 100) {
+    public World(int width, int height) {
+        // TODO: Separate out some logic here
+
         this.width = width;
         this.height = height;
 
         this.tiles = new Tile[width, height];
-
-        // Instantiate our empty tiles for this world.
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                tiles[x, y] = new Tile(this, x, y);
-            }
-        }
+        this.characters = new List<Character>();
     }
 
     #endregion
 
     #region Helper Methods
 
+    // HACK: In order to be able to have other controllers listen for creation events, we can't put those events in the constructor,
+    // so we create another helper method to actually create the models, and fire the events
+    // TODO: We probably need to come up with a generic event system that we can use that isn't tied directly to models.
+    public void InitializeWorld() {
+        // Instantiate our empty tiles for this world.
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Tile tile = new Tile(this, x, y);
+                tiles[x, y] = tile;
+
+                if (tileCreatedCallback != null) {
+                    tileCreatedCallback(tile);
+                }
+            }
+        }
+
+        Character character = new Character(tiles[width / 2, height / 2], 4.0f);    // FIXME: manually set character speed here.
+        characters.Add(character);
+
+        if (characterCreatedCallback != null) {
+            characterCreatedCallback(character);
+        }
+    }
+
+    // TODO: change these into generic exceptions
     public Tile GetTileAt(int x, int y) {
         if (x >= Width || x < 0) {
-            throw new ArgumentOutOfRangeException("x");
+            throw new ArgumentOutOfRangeException("x", "World::GetTileAt");
         } else if (y >= Height || y < 0) {
-            throw new ArgumentOutOfRangeException("y");
+            throw new ArgumentOutOfRangeException("y", "World::GetTileAt");
         }
         return tiles[x, y];
     }

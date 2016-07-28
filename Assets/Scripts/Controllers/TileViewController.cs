@@ -11,8 +11,6 @@ public class TileViewController : MonoBehaviour {
     // FIXME: Implement this in a better way
     Dictionary<string, Sprite> tileSpriteMap;
 
-    World world;
-
     #endregion
 
     #region MonoBehavior Implementations
@@ -30,33 +28,28 @@ public class TileViewController : MonoBehaviour {
             tileSpriteMap[sprite.name] = sprite;
         }
 
-        world = WorldController.Instance.World;
-
-        // Create the Tile views from the Tile models
-        for (int x = 0; x < world.Width; x++) {
-            for (int y = 0; y < world.Height; y++) {
-                Tile tile = world.GetTileAt(x, y);
-
-                GameObject tileGO = (GameObject)Instantiate(tileViewPrefab, new Vector3(tile.X, tile.Y, 0.0f), Quaternion.identity);
-                TileView tileView = tileGO.GetComponent<TileView>();
-
-                tileGO.name = tileViewPrefab.name + "_" + tile.X + "_" + tile.Y;
-                tileGO.transform.SetParent(this.transform);
-
-                // Trigger the event handler to setup the Tile view for the first time.
-                OnTileChanged(tile, tile.Type, tileGO);
-
-                // Setup Tile model event handlers
-                tile.typeChangedCallback += (t, previousType) => OnTileChanged(t, previousType, tileGO);
-
-                // Setup Tile view events handlers
-            }
-        }
+        WorldController.Instance.World.tileCreatedCallback += OnTileCreated;
     }
 
     #endregion
 
     #region Event Handlers
+
+    void OnTileCreated(Tile tile) {
+        GameObject tileGO = (GameObject)Instantiate(tileViewPrefab, new Vector3(tile.X, tile.Y, 0.0f), Quaternion.identity);
+        //TileView tileView = tileGO.GetComponent<TileView>();
+
+        tileGO.name = tileViewPrefab.name + "_" + tile.X + "_" + tile.Y;
+        tileGO.transform.SetParent(this.transform);
+
+        SpriteRenderer tileSR = tileGO.GetComponent<SpriteRenderer>();
+        tileSR.sprite = SpriteForTile(tile);
+
+        // Setup Tile model event handlers
+        tile.typeChangedCallback += (t, previousType) => OnTileChanged(t, previousType, tileGO);
+
+        // Setup Tile view event handlers
+    }
 
     void OnTileChanged(Tile tile, TileType previousType, GameObject tileGO) {
         SpriteRenderer tileSR = tileGO.GetComponent<SpriteRenderer>();
