@@ -5,6 +5,7 @@ public class World {
     #region Fields
 
     Tile[,] tiles;
+    Character mainCharacter;    // TODO: Not sure if this is how I want to do this...
     List<Character> characters;
 
     int width;
@@ -32,12 +33,19 @@ public class World {
         }
     }
 
+    public Character MainCharacter {
+        get {
+            return this.mainCharacter;
+        }
+    }
+
     #endregion
 
     #region Events
 
     public event Action<Tile> tileCreatedCallback;
-    public event Action<Character> characterCreatedCallback;
+    public event Action<Character> mainCharacterCreatedCallback;
+    public event Action<InstalledObject> installedObjectCreatedCallback;
 
     #endregion
 
@@ -73,11 +81,10 @@ public class World {
             }
         }
 
-        Character character = new Character(tiles[width / 2, height / 2], 4.0f);    // FIXME: manually set character speed here.
-        characters.Add(character);
+        mainCharacter = new Character(tiles[width / 2, height / 2], 4.0f);    // FIXME: manually set character speed here.
 
-        if (characterCreatedCallback != null) {
-            characterCreatedCallback(character);
+        if (mainCharacterCreatedCallback != null) {
+            mainCharacterCreatedCallback(mainCharacter);
         }
     }
 

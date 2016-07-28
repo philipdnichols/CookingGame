@@ -55,8 +55,8 @@ public class CameraManager : MonoBehaviour {
     void CheckMouseMovement() {
         Vector3 currFramePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
-        // Right or Middle Mouse
-        if (Input.GetMouseButton(1) || Input.GetMouseButton(2)) {
+        // Middle Mouse
+        if (Input.GetMouseButton(2)) {
             Vector3 diff = lastFramePosition - currFramePosition;
             mainCameraTransform.Translate(diff);
         }

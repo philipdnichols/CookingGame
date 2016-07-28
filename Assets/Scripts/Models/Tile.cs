@@ -2,6 +2,7 @@
 
 public enum TileType { Dirt, Grass }
 
+// TODO: make tile prototypes like InstalledObjectPrototypes
 public class Tile {
     #region Fields
 

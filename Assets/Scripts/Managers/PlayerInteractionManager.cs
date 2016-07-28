@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public enum PlayerInteractionMode { MoveMainCharacter }
+// HACK: InstallObject is temporary for now, installing objects in the game is to be done by Characters
+public enum PlayerInteractionMode { MoveMainCharacter, InstallObject }
 
 public class PlayerInteractionManager : MonoBehaviour {
     #region Fields
@@ -20,7 +21,7 @@ public class PlayerInteractionManager : MonoBehaviour {
         world = WorldController.Instance.World;
         mainCamera = Camera.main;
 
-        world.characterCreatedCallback += OnCharacterCreated;
+        world.mainCharacterCreatedCallback += OnCharacterCreated;
 	}
 	
 	void Update() {
@@ -48,7 +49,7 @@ public class PlayerInteractionManager : MonoBehaviour {
 
     void Update_MoveMainCharacterMode(float deltaTime) {
         // HACK: Just a temporary way to test out character pathfinding.
-        if (Input.GetMouseButtonUp(0)) {
+        if (Input.GetMouseButtonUp(1)) {
             Tile tile = WorldController.Instance.GetTileAtWorldPosition(mainCamera.ScreenToWorldPoint(Input.mousePosition));
             if (tile != null) {
                 mainCharacter.DestinationTile = tile;

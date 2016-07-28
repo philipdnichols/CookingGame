@@ -48,6 +48,8 @@ public class WorldController : MonoBehaviour {
             world.InitializeWorld();
         }
 
+        world.MainCharacter.Update(Time.deltaTime);
+
         foreach (Character character in world.Characters) {
             character.Update(Time.deltaTime);
         }

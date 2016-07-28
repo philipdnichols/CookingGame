@@ -32,7 +32,7 @@ public class CharacterViewController : MonoBehaviour {
             characterSpriteMap[sprite.name] = sprite;
         }
 
-        WorldController.Instance.World.characterCreatedCallback += OnCharacterCreated;
+        WorldController.Instance.World.mainCharacterCreatedCallback += OnCharacterCreated;
     }
 
     #endregion
